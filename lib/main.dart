@@ -1,4 +1,71 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatefulWidget{
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp>{
+  late GoogleMapController mapController;
+
+  LatLng _center = const LatLng(61.89000, 6.67000);
+
+  void _onMapCreated(GoogleMapController controller){
+    mapController = controller;
+  }
+
+  void move(double north, double east){
+    LatLng newCenter = LatLng(_center.latitude + north, _center.longitude + east);
+    print("${_center.latitude}, ${_center.longitude}");
+    _center = newCenter;
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    print("build: ${_center.latitude}, ${_center.longitude}");
+
+
+    return MaterialApp(
+      home:Scaffold(
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            move(0.1,0.1);
+          },
+
+        ),
+        appBar: AppBar(
+          title:const Text('Maps Sample App'),
+          backgroundColor: Colors.green[700],
+        ),
+        body: GoogleMap(
+          onMapCreated: _onMapCreated,
+          initialCameraPosition: CameraPosition(
+            target: _center,
+            zoom:11.0,
+            bearing: 45.0,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+
+
+
+/*
+
+import 'package:flutter/material.dart';
 
 void main() {
   runApp(const MyApp());
@@ -113,3 +180,6 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
+
+ */
